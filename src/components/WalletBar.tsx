@@ -3,6 +3,7 @@ import { useAccount, useReadContract } from 'wagmi'
 import { erc20Abi } from 'viem'
 import { getUsdc, requireChain } from '@/onchain-facts'
 import { Amount, usdcDecimalsFor } from '@/onchain-money'
+import { usdcText } from '@/format'
 import { TokenUSDC } from '@web3icons/react'
 import { TARGET_CHAIN_ID } from '@/contract-config'
 
@@ -23,7 +24,7 @@ export default function WalletBar() {
   })
 
   const balance = rawBalance != null
-    ? Amount.fromRaw(rawBalance, usdcDecimalsFor(TARGET_CHAIN_ID)).toFixed(2)
+    ? usdcText(Amount.fromRaw(rawBalance, usdcDecimalsFor(TARGET_CHAIN_ID)))
     : null
 
   return (

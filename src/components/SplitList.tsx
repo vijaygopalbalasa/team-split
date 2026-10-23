@@ -3,6 +3,7 @@ import { ChevronRight, Users, DollarSign } from 'lucide-react'
 import { TEAM_SPLIT_ABI, TARGET_CHAIN_ID, TARGET_CHAIN_NAME } from '@/contract-config'
 import { useContractAddress } from '@/hooks/useContractAddress'
 import { Amount, usdcDecimalsFor } from '@/onchain-money'
+import { usdcText } from '@/format'
 
 interface SplitData {
   name: string
@@ -12,7 +13,7 @@ interface SplitData {
 }
 
 function formatUsdc(raw: bigint): string {
-  return Amount.fromRaw(raw, usdcDecimalsFor(TARGET_CHAIN_ID)).toFixed(2)
+  return usdcText(Amount.fromRaw(raw, usdcDecimalsFor(TARGET_CHAIN_ID)))
 }
 
 function SplitCard({ splitId, onClick }: { splitId: bigint; onClick: () => void }) {

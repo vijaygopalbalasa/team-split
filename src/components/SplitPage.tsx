@@ -2,6 +2,7 @@ import { useAccount, useReadContract, useWriteContract, useWaitForTransactionRec
 import { waitForTransactionReceipt } from 'wagmi/actions'
 import { erc20Abi } from 'viem'
 import { config } from '@/config'
+import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { ArrowLeft, Loader2, ExternalLink, Users, DollarSign } from 'lucide-react'
@@ -10,6 +11,7 @@ import { TEAM_SPLIT_ABI, TARGET_CHAIN_ID, TARGET_CHAIN_NAME, getTxUrl } from '@/
 import { useContractAddress } from '@/hooks/useContractAddress'
 import { getUsdc } from '@/onchain-facts'
 import { parseAmount, Amount, usdcDecimalsFor } from '@/onchain-money'
+import { usdcText } from '@/format'
 import { parseOnchainError } from '@/utils/errors'
 
 const usdcFact = getUsdc(TARGET_CHAIN_ID)!
@@ -22,7 +24,7 @@ interface SplitData {
 }
 
 function fmtUsdc(raw: bigint): string {
-  return Amount.fromRaw(raw, usdcDecimalsFor(TARGET_CHAIN_ID)).toFixed(2)
+  return usdcText(Amount.fromRaw(raw, usdcDecimalsFor(TARGET_CHAIN_ID)))
 }
 
 function shortAddr(addr: string) {
@@ -69,6 +71,8 @@ export default function SplitPage({ splitId, onBack }: { splitId: bigint; onBack
   const { writeContractAsync: withdrawAsync, data: withdrawHash, isPending: isWithdrawPending, reset: resetWithdraw } = useWriteContract()
   const { isSuccess: isWithdrawSuccess, isLoading: isWithdrawConfirming } = useWaitForTransactionReceipt({ hash: withdrawHash })
 
+  const queryClient = useQueryClient()
+
   // Approve, wait for it to land, then pay. Sequenced here in the click handler so each click sends one pay.
   async function runPay(raw: bigint) {
     if (!contractAddress) return
@@ -91,6 +95,8 @@ export default function SplitPage({ splitId, onBack }: { splitId: bigint; onBack
         chainId: TARGET_CHAIN_ID,
       })
       await waitForTransactionReceipt(config, { hash: payTx, chainId: TARGET_CHAIN_ID })
+      // every member's row, the balance in the header and this split all change: refresh every read
+      void queryClient.invalidateQueries()
       void refetchSplit()
       void refetchClaimable()
     } catch (err) {
@@ -117,6 +123,7 @@ export default function SplitPage({ splitId, onBack }: { splitId: bigint; onBack
         chainId: TARGET_CHAIN_ID,
       })
       await waitForTransactionReceipt(config, { hash: tx, chainId: TARGET_CHAIN_ID })
+      void queryClient.invalidateQueries()
       void refetchClaimable()
       void refetchSplit()
     } catch (err) {
@@ -288,7 +295,7 @@ export default function SplitPage({ splitId, onBack }: { splitId: bigint; onBack
           {payStep === 'approving' && (
             <p className="text-center text-xs" style={{ color: 'var(--muted)' }}>Step 1 of 2: approve USDC spending</p>
           )}
-          {payStep === 'paying' && (
+          {payStep === 'paying' && !isPaySuccess && (
             <p className="text-center text-xs" style={{ color: 'var(--muted)' }}>Step 2 of 2: sending payment to split</p>
           )}
 

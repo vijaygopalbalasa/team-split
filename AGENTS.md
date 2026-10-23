@@ -22,6 +22,10 @@ USDC revenue splitter on Arc Testnet. Teams create immutable splits with fixed b
 
 Deploy tx: 0x28641964d76f9f4e8fb51d240b4ca059b7100d08b90792290af33e1c06dd0165
 
+## Arc mainnet
+
+Live at `0xd6989212dbf1c7f4431a5dde20cbe08cfb3a38d5` (chain 5042), source verified on Sourcify (exact match). Build the app for it with `VITE_NETWORK=ARC-MAINNET bun run build`. README.md lists the mainnet transactions and the fixes made after the Arc Studio build.
+
 ## Key Files
 
 - `src/App.tsx` - Root: home view (split list + new split form) and split detail view
