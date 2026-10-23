@@ -4,7 +4,7 @@ A USDC revenue splitter. A team creates a split once with fixed shares, anyone p
 
 Built in [Arc Studio](https://studio.arc.io) and live on Arc mainnet.
 
-- Live app: LIVE_APP_URL
+- Live app: https://team-split-arc.vercel.app
 - Arc Studio project: https://studio.arc.io/app/e9d02662-32e5-43cb-8a94-e5e53bca62a3
 - Contract on Arc mainnet: [`0xd6989212dbf1c7f4431a5dde20cbe08cfb3a38d5`](https://explorer.arc.io/address/0xd6989212dbf1c7f4431a5dde20cbe08cfb3a38d5), source verified on [Sourcify](https://repo.sourcify.dev/5042/0xd6989212dbf1c7f4431a5dde20cbe08cfb3a38d5) (exact match), deployed in [`0x77494bff…`](https://explorer.arc.io/tx/0x77494bff71dd5f980c1106ad03d5ea49306990fbd8c4fc2c25b59d992ffb3856)
 - Contract on Arc testnet: [`0x06bd8548e7589ee4eabdfde872d86539f1f909b0`](https://testnet.arcscan.app/address/0x06bd8548e7589ee4eabdfde872d86539f1f909b0)
